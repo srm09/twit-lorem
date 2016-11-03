@@ -1,0 +1,8 @@
+{
+  "name": "twit-lorem",
+  "description": "Twitter based Lorem Ipsum generator",
+  "author": "Foo Bar",
+  "dependencies": {
+    "express": ">= 1.2.0"
+  }
+}
