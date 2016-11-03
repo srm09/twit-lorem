@@ -25,3 +25,7 @@ app.get('/word/:number', (req, res) => {
 app.get('/letter/:number', (req, res) => {
   return res.send("letters")
 })
+
+app.get('/handles', (req, res) => {
+  return res.send(["abc", "xyz"])
+})
