@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Lorem Ipsum Generator</title>
+    <title>Result</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -63,13 +63,16 @@
         <div class="text-vertical-center">
             <h1 style="color:white;">Lorem Ipsum</h1>
             <h3 style="color:white;">Generate</h3>
-
             <form><input type="number" name="counts"></form><br>
-            <div style="color:white;">
-            	<input type="radio" name="selection" value="paragraph" checked> Paragraph</input>
-            	<input type="radio" name="selection" value="Words"> Words</input>
-            	<input type="radio" name="selection" value="lines"> Lines<br><br>
-            </div>
+            <label class="radio-inline" style="color:white;">
+  				<input type="radio" name="selections" id="inlineRadio1" value="paragraph">  Paragraphs
+			</label>
+			<label class="radio-inline" style="color:white;">
+  				<input type="radio" name="selections" id="inlineRadio2" value="words">  Words
+			</label>
+			<label class="radio-inline" style="color:white;">
+  				<input type="radio" name="selections" id="inlineRadio3" value="lines">  Lines
+			</label><br><br>
             <a href="#about" class="btn btn-dark btn-lg">Submit</a>
         </div>
     </header>
@@ -80,7 +83,7 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2>Project Lorem Ipsum Landing Page for Group 1</h2>
-                    <p class="lead">Lorem Ipsum implementation for VMware Flight School Docker & AWS Session </p>
+                    <p class="lead">Lorem Ipsum implementation for VMware Flight School's Docker & AWS Session </p>
                 </div>
             </div>
             <!-- /.row -->
