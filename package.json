@@ -4,6 +4,7 @@
   "author": "Foo Bar",
   "dependencies": {
     "express": ">= 1.2.0",
-    "redis": "^2.6.3"
+    "redis": "^2.6.3",
+    "twitter": "^1.4.0"
   }
 }

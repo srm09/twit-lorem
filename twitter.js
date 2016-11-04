@@ -1,5 +1,5 @@
 var Twitter = require('twitter');
- 
+
 var client = new Twitter({
   //consumer_key: TWITTER_CONSUMER_KEY,
   //consumer_secret: TWITTER_CONSUMER_SECRET,
@@ -12,25 +12,19 @@ var client = new Twitter({
   access_token_secret: '5kJ2be1vmtSrRsP21KmmadBnFLYh1arjzvp2qHvOvqwqv'
 });
 
-var cb = function(data) {
-         console.log(data);
-}
-
-entry_point(['Lord_Voldemort7', 'ItsBadluckBrian']);//, 'BettyFckinWhite']);
-function entry_point(handle_list)
-{
-    for (i = 0; i<handle_list.length; i++)
-    {
-	test(handle_list[i], cb);
-    }
+module.exports.fetchTweets = function(handles, callback) {
+  for (i = 0; i<handle_list.length; i++) {
+     test(handle_list[i], callback);
+  }
 }
 
 function test(user, callback) {
-   client.get('search/tweets.json', {q: 'from:'+user}, (error, tweets, response) => {
+   client.get('search/tweets', {q: 'from:'+user, until: '2016-11-02', count:100 }, (error, tweets, response) => {
    if(error) {
-	console.log(error)
-	throw error;
-	}
-   callback(tweets);
+  	console.log(error)
+  	throw error;
+	 }
+   //tweets.forEach()
+   callback(user, tweets);
    });
 }
