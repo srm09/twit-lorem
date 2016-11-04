@@ -32,21 +32,24 @@ app.listen(3000, function () {
 app.get('/para/:handle/:number', (req, res) => {
   var params = parseForParams(req)
   getParagraphs(params.count, params.handle, (paragraph_arr) => {
-    res.send(paragraph_arr);
+    res.send({"handle": params.handle,
+              "paras":paragraph_arr});
   })
 })
 
 app.get('/word/:handle/:number', (req, res) => {
   var params = parseForParams(req)
   getWords(params.count, params.handle, (paragraph_arr) => {
-    res.send(paragraph_arr);
+    res.send({"handle": params.handle,
+              "paras":paragraph_arr});
   })
 })
 
 app.get('/letter/:handle/:number', (req, res) => {
   var params = parseForParams(req)
   getLetters(params.count, params.handle, (paragraph_arr) => {
-    res.send(paragraph_arr);
+    res.send({"handle": params.handle,
+              "paras":paragraph_arr});
   })
 })
 
@@ -139,7 +142,7 @@ var brkIntoParas = function(cb) {
         para_text += (' '+word_arr[count])
         count++
       }
-      para_texts.push('<pre>' + para_text + '</pre>')
+      para_texts.push('<p>' + para_text + '</p>')
     }
     cb(para_texts)
   }
@@ -165,7 +168,8 @@ var breakIntoParas = function(paras, nums, resp_callback) {
     console.log('paragraphs.length: '+paragraphs.length)
     var ret =[]
     for(var i=0; i<paragraphs.length; ++i) {
-      ret.push('<pre>'+paragraphs[i]+'</pre>')
+      ret.push('<p>'+paragraphs[i]+'</p>')
+      //ret.push(paragraphs[i])
     }
     console.log('Returning using response.send')
     resp_callback(ret)

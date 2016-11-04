@@ -64,26 +64,49 @@
             <h1 style="color:white;">Lorem Ipsum</h1>
             <h3 style="color:white;">Generate</h3>
             <form><input type="number" id="count" name="counts" value="1"></form><br>
-            <label class="radio-inline" style="color:white;">
+
+            <div class="radio">
+            <label>
   				<input type="radio" name="selections" id="inlineRadio1" value="para" checked>  Paragraphs
 			</label>
-			<label class="radio-inline" style="color:white;">
+			<label>
   				<input type="radio" name="selections" id="inlineRadio2" value="word">  Words
 			</label>
-			<label class="radio-inline" style="color:white;">
+			<label>
   				<input type="radio" name="selections" id="inlineRadio3" value="letter">  Letters
-			</label><br><br>
+			</label>
+    </div>
+      <br><br>
 			<p style="color:white;">Using Tweets of</p>
 			<select id="handleSelect" class="form-control, center-div" style="width:10%;align:center;">
-  				<!--option>Donald Trump</option>
-  				<option>Hillary Clinton</option>
-  				<option>Bill Gates</option>
-  				<option>Uber Facts</option>
-  				<option>Kim Kardashian</option-->
-			</select><br><br>
+  		</select><br><br>
             <a id="genLorem" class="btn btn-dark btn-lg">Submit</a>
         </div>
     </header>
+
+    <button id="modalLauncher" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" style="display:none">
+        Launch demo modal
+    </button>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel"></h4>
+      </div>
+      <div id="loremIpsumBody" class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Copy to clipboard</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
     <!-- About -->
     <section id="about" class="about">
