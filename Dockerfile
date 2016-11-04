@@ -1,5 +1,5 @@
 # Set the base image to Ubuntu
-FROM        ubuntu
+FROM        ubuntu:latest
 
 # Update the repository
 RUN         apt-get update
@@ -10,18 +10,22 @@ RUN         apt-get install -y redis-server
 # Install wget
 RUN         apt-get install -y wget
 
-# Install Redis Server
+# Install Nodejs
 RUN         wget -O - http://nodejs.org/dist/v0.10.29/node-v0.10.29-linux-x64.tar.gz \
   | tar xzf - --strip-components=1 --exclude="README.md" --exclude="LICENSE" \
   --exclude="ChangeLog" -C "/usr/local"
 
+# Install npm
+RUN         apt-get install -y npm
+
 # Copy app to /src
 COPY . /src
 
-EXPOSE 8080
+# Expose port
+EXPOSE 3000
 
-# Install app and dependencies into /src
-RUN cd /src; npm install
+# Call the init script
+CMD chmod 777 /src/init.sh
 
-# Run Server
-CMD cd /src && node ./app.js
+# Call the init script
+CMD /src/init.sh
