@@ -4,4 +4,4 @@ echo "Starting redis-server"
 service redis-server start
 
 echo "Starting nodejs server"
-npm start
+cd src && npm start

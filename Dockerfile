@@ -11,7 +11,7 @@ RUN         apt-get install -y redis-server
 RUN         apt-get install -y wget
 
 # Install Nodejs
-RUN         wget -O - http://nodejs.org/dist/v0.10.29/node-v0.10.29-linux-x64.tar.gz \
+RUN         wget -O - http://nodejs.org/dist/v6.0.0/node-v6.0.0-linux-x64.tar.gz \
   | tar xzf - --strip-components=1 --exclude="README.md" --exclude="LICENSE" \
   --exclude="ChangeLog" -C "/usr/local"
 
