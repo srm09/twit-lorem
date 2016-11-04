@@ -140,9 +140,10 @@ var brkIntoParas = function(cb) {
     var para_texts = [], count =0
     for(var i=0; i<para_sizes.length; ++i) {
       var size_of_para = para_sizes[i], para_text = ''
-      for(var j=0; j<size_of_para; ++j) {
+      for(var j=0; j<size_of_para; ) {
         if(! word_arr[count].startsWith('http')) {
           para_text += (' '+word_arr[count])
+          ++j
         }
         count++
       }
@@ -158,10 +159,12 @@ var breakIntoParas = function(paras, nums, resp_callback) {
     var content_arr = content.split(' ')
     for (var i=0; i<paras; ++i) {
       var temp = 0, para_text = '';
-      for (var j=0; j<nums[i]; ++j) {
+      for (var j=0; j<nums[i]; ) {
         //console.log(content_arr[temp])
-        if(! content_arr[temp].startsWith('http'))
+        if(! content_arr[temp].startsWith('http')) {
           para_text += ' '+content_arr[temp]
+          ++j
+        }
         temp++;
         // check for size of temp and reset
         if(temp == content_arr.length) temp=0
