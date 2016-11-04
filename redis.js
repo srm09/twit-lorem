@@ -23,7 +23,7 @@ function Redis(){
 
   this.getAll = function(key, callback) {
     this.client.llen(key, (err, count) => {
-      this.client.lrange(key, 0, count-1, (err, data) => {
+      this.client.lrange(key, 0, count, (err, data) => {
         if(err) throw err;
         callback(data)
       })

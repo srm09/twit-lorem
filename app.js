@@ -7,7 +7,7 @@ var Redis = require('./redis.js'),
 // Defaults
 DEFAULT_PARA_LENGTH = 200
 
-
+// Init Redis client
 rClient.init()
 
 app.get('/', function (req, res) {
@@ -28,7 +28,10 @@ app.get('/para/:handle/:number', (req, res) => {
 })
 
 app.get('/word/:handle/:number', (req, res) => {
-  return res.send("words")
+  var params = parseForParams(req)
+  getWords(params.count, params.handle, (paragraph_arr) => {
+    res.send(paragraph_arr);
+  })
 })
 
 app.get('/letter/:handle/:number', (req, res) => {
@@ -52,38 +55,67 @@ function getRandomIntInclusive(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-var getParagraphs = function(paras, handle, callback) {
+var getParagraphs = function(number_of_paras, handle, callback) {
 
-  var nums = [], total = 0;
-  for (var i=0; i<paras; ++i) {
-    var count = getRandomIntInclusive(2, 9) * 100
+  var nums = [];
+  for (var i=0; i<number_of_paras; ++i) {
+    var count = getRandomIntInclusive(2, 4) * 100
     nums.push(count)
-    total += count
   }
 
-  var cb = breakIntoParas(paras, nums, callback)
-  getWords(total, handle, cb)
+  var cb = breakIntoParas(number_of_paras, nums, callback)
+  fetchFromRedis(handle, cb)
+}
+
+var getWords = function(number_of_words, handle, callback) {
+  var para_divider = getRandomIntInclusive(2, 4) * 100
+  var para_sizes = []
+  while(number_of_words > para_divider) {
+    para_sizes.push(para_divider)
+    number_of_words -= para_divider
+  }
+  para_sizes.push(number_of_words)
+
+  var cb = breakIntoParas(para_sizes.length, para_sizes, callback)
+  fetchFromRedis(handle, cb)
 }
 
 var breakIntoParas = function(paras, nums, resp_callback) {
-  return function() {
-    var  x = 0;
+  return function(content) {
+    var  x = 0, paragraphs=[];
+    var content_arr = content.split(' ')
     for (var i=0; i<paras; ++i) {
-      paragraphs.push(content.substring(x, nums[i]-1))
-      x += num
+      var temp = 0, para_text = '';
+      for (var j=0; j<nums[i]; ++j) {
+        //console.log(content_arr[temp])
+        para_text += ' '+content_arr[temp]
+        temp++;
+        // check for size of temp and reset
+        if(temp == content_arr.length) temp=0
+      }
+      console.log('Para formed: '+para_text)
+      paragraphs.push(para_text)
     }
 
+    console.log('paragraphs.length: '+paragraphs.length)
     var ret =[]
     for(var i=0; i<paragraphs.length; ++i) {
       ret.push('<pre>'+paragraphs[i]+'</pre>')
     }
+    console.log('Returning using response.send')
     resp_callback(ret)
   }
 }
 
-var getWords = function(length, key, callback) {
+var fetchFromRedis = function(key, callback) {
 
-  tweets = rClient.getAll(key, callback)
+  console.log('Inside getWords')
+  rClient.getAll(key, function(tweets_arr) {
+    console.log('getAll for redis returned array: '+tweets_arr.length)
+    var tweet_string='';
+    for(var i=0; i<tweets_arr.length; ++i) tweet_string += (' '+tweets_arr[i])
+    callback(tweet_string)
+  })
 }
 
 var twitter_handles = ['timesofindia', 'mashable']

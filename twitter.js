@@ -13,8 +13,8 @@ var client = new Twitter({
 });
 
 module.exports.fetchTweets = function(handles, callback) {
-  for (i = 0; i<handle_list.length; i++) {
-     test(handle_list[i], callback);
+  for (i = 0; i<handles.length; i++) {
+     test(handles[i], callback);
   }
 }
 
@@ -25,6 +25,9 @@ function test(user, callback) {
   	throw error;
 	 }
    //tweets.forEach()
-   callback(user, tweets);
+   texts =[]
+   for (var i=0; i<tweets.statuses.length; ++i)
+    texts.push(tweets.statuses[i].text)
+   callback(user, texts);
    });
 }
