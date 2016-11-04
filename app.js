@@ -7,7 +7,9 @@ var Redis = require('./redis.js'),
 
 // Defaults
 DEFAULT_PARA_LENGTH = 200
-var twitter_handles = ['timesofindia', 'mashable']
+var twitter_handles = ['ConanOBrien', 'OhWonka', 'DeathStarPR', 'FirstWorldPains', 'WolfpackAlan', 'Lmao',
+'TheTweetOfGod', 'kellyoxford', 'MensHumor', 'itsBroStinson', 'ShitNobodySays', 'itsWillyFerrell',
+'TheBatman', 'WomensHumor']
 
 // Init Redis client
 rClient.init()
@@ -139,7 +141,9 @@ var brkIntoParas = function(cb) {
     for(var i=0; i<para_sizes.length; ++i) {
       var size_of_para = para_sizes[i], para_text = ''
       for(var j=0; j<size_of_para; ++j) {
-        para_text += (' '+word_arr[count])
+        if(! word_arr[count].startsWith('http')) {
+          para_text += (' '+word_arr[count])
+        }
         count++
       }
       para_texts.push('<p>' + para_text + '</p>')
@@ -156,7 +160,8 @@ var breakIntoParas = function(paras, nums, resp_callback) {
       var temp = 0, para_text = '';
       for (var j=0; j<nums[i]; ++j) {
         //console.log(content_arr[temp])
-        para_text += ' '+content_arr[temp]
+        if(! content_arr[temp].startsWith('http'))
+          para_text += ' '+content_arr[temp]
         temp++;
         // check for size of temp and reset
         if(temp == content_arr.length) temp=0
@@ -178,7 +183,6 @@ var breakIntoParas = function(paras, nums, resp_callback) {
 
 var fetchFromRedis = function(key, callback) {
 
-  console.log('Inside getWords')
   rClient.getAll(key, function(tweets_arr) {
     console.log('getAll for redis returned array: '+tweets_arr.length)
     var tweet_string='';

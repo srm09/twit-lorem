@@ -18,7 +18,7 @@ function Redis(){
   }
 
   this.pushAll = function(key, values) {
-    this.client.lpush(key, values)
+    if(values!==undefined && values.length!=0) this.client.lpush(key, values)
   }
 
   this.getAll = function(key, callback) {
