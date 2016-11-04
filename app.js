@@ -7,9 +7,15 @@ var Redis = require('./redis.js'),
 
 // Defaults
 DEFAULT_PARA_LENGTH = 200
+var twitter_handles = ['timesofindia', 'mashable']
 
 // Init Redis client
 rClient.init()
+
+// Load Redis with twitter crap
+twitter.fetchTweets(twitter_handles, (handle_name, data) => {
+  rClient.pushAll(handle_name, data)
+})
 
 // Use middleware for hosting static files
 app.use('/public', express.static('ProjectIpsum'))
@@ -26,26 +32,29 @@ app.listen(3000, function () {
 app.get('/para/:handle/:number', (req, res) => {
   var params = parseForParams(req)
   getParagraphs(params.count, params.handle, (paragraph_arr) => {
-    res.send(paragraph_arr);
+    res.send({"handle": params.handle,
+              "paras":paragraph_arr});
   })
 })
 
 app.get('/word/:handle/:number', (req, res) => {
   var params = parseForParams(req)
   getWords(params.count, params.handle, (paragraph_arr) => {
-    res.send(paragraph_arr);
+    res.send({"handle": params.handle,
+              "paras":paragraph_arr});
   })
 })
 
 app.get('/letter/:handle/:number', (req, res) => {
   var params = parseForParams(req)
   getLetters(params.count, params.handle, (paragraph_arr) => {
-    res.send(paragraph_arr);
+    res.send({"handle": params.handle,
+              "paras":paragraph_arr});
   })
 })
 
 app.get('/handles', (req, res) => {
-  return res.send(["abc", "xyz"])
+  res.send(twitter_handles)
 })
 
 function parseForParams(req) {
@@ -87,26 +96,56 @@ var getWords = function(number_of_words, handle, callback) {
 }
 
 var getLetters = function(number_of_letters, handle, resp_callback) {
-  // var breakLettersToWords = function(content) {
-  //   var temp = number_of_letters, content_arr = content.split(' ')
-  //   var word_arr = [], i = 0
-  //   while(i<content_arr.length) {
-  //     var curr_word = content_arr[i]
-  //     var len = curr_word.length
-  //     if(temp >= len) {
-  //       temp -= len
-  //       word_arr.push(curr_word)
-  //     } else {
-  //       // this word is too long, break it and exit the loop
-  //       word_arr.push(curr_word.substring(0, temp))
-  //       break;
-  //     }
-  //     i++;
-  //     if(i == content_arr.length) i = 0;
-  //   }
-  //
-  //
-  // }
+  var breakLettersToWords = function(content, paracallback) {
+    var temp = number_of_letters, content_arr = content.split(' ')
+    var word_arr = [], i = 0
+    while(i<content_arr.length) {
+      var curr_word = content_arr[i]
+      var len = curr_word.length
+      if(temp >= len) {
+        temp -= len
+        word_arr.push(curr_word)
+      } else {
+        // this word is too long, break it and exit the loop
+        word_arr.push(curr_word.substring(0, temp))
+        break;
+      }
+      i++;
+      if(i == content_arr.length) i = 0;
+    }
+    paracallback(word_arr)
+  }
+
+  var toParas = brkIntoParas(resp_callback)
+
+  fetchFromRedis(handle, function(content) {
+    breakLettersToWords(content, toParas)
+  })
+}
+
+var brkIntoParas = function(cb) {
+
+  return function(word_arr) {
+    var para_divider = getRandomIntInclusive(2, 4) * 100
+    var para_sizes = []
+    var temp = word_arr.length
+    while(temp > para_divider) {
+      para_sizes.push(para_divider)
+      temp -= para_divider
+    }
+    para_sizes.push(temp)
+
+    var para_texts = [], count =0
+    for(var i=0; i<para_sizes.length; ++i) {
+      var size_of_para = para_sizes[i], para_text = ''
+      for(var j=0; j<size_of_para; ++j) {
+        para_text += (' '+word_arr[count])
+        count++
+      }
+      para_texts.push('<p>' + para_text + '</p>')
+    }
+    cb(para_texts)
+  }
 }
 
 var breakIntoParas = function(paras, nums, resp_callback) {
@@ -129,7 +168,8 @@ var breakIntoParas = function(paras, nums, resp_callback) {
     console.log('paragraphs.length: '+paragraphs.length)
     var ret =[]
     for(var i=0; i<paragraphs.length; ++i) {
-      ret.push('<pre>'+paragraphs[i]+'</pre>')
+      ret.push('<p>'+paragraphs[i]+'</p>')
+      //ret.push(paragraphs[i])
     }
     console.log('Returning using response.send')
     resp_callback(ret)
@@ -146,8 +186,3 @@ var fetchFromRedis = function(key, callback) {
     callback(tweet_string)
   })
 }
-
-var twitter_handles = ['timesofindia', 'mashable']
-twitter.fetchTweets(twitter_handles, (handle_name, data) => {
-  rClient.pushAll(handle_name, data)
-})
