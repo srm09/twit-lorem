@@ -7,9 +7,9 @@ var Redis = require('./redis.js'),
 
 // Defaults
 DEFAULT_PARA_LENGTH = 200
-var twitter_handles = ['ConanOBrien', 'OhWonka', 'DeathStarPR', 'FirstWorldPains', 'WolfpackAlan', 'Lmao',
-'TheTweetOfGod', 'kellyoxford', 'MensHumor', 'itsBroStinson', 'ShitNobodySays', 'itsWillyFerrell',
-'TheBatman', 'WomensHumor']
+var twitter_handles = ['ConanOBrien', 'FirstWorldPains', 'Lmao', 'realDonaldTrump', 'BarackObama',
+'kellyoxford', 'MensHumor', 'itsBroStinson', 'itsWillyFerrell', 'Seinfeld2000', 'shutupmikeginn',
+'WomensHumor']
 
 // Init Redis client
 rClient.init()
