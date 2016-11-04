@@ -6,5 +6,9 @@
     "express": ">= 1.2.0",
     "redis": "^2.6.3",
     "twitter": "^1.4.0"
+  },
+  "scripts": {
+    "prestart": "npm install",
+    "start": "node app.js"
   }
 }
