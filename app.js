@@ -1,5 +1,6 @@
 var express = require('express')
-var app = express()
+var app = express(),
+    path = require('path')
 var twitter = require('./twitter.js')
 var Redis = require('./redis.js'),
     rClient = new Redis.Redis()
@@ -10,8 +11,11 @@ DEFAULT_PARA_LENGTH = 200
 // Init Redis client
 rClient.init()
 
+// Use middleware for hosting static files
+app.use('/public', express.static('ProjectIpsum'))
+
 app.get('/', function (req, res) {
-  res.send('Hello World!')
+  res.sendFile(path.join(__dirname + '/index.html'))
 })
 
 app.listen(3000, function () {
@@ -24,7 +28,6 @@ app.get('/para/:handle/:number', (req, res) => {
   getParagraphs(params.count, params.handle, (paragraph_arr) => {
     res.send(paragraph_arr);
   })
-
 })
 
 app.get('/word/:handle/:number', (req, res) => {
@@ -35,7 +38,10 @@ app.get('/word/:handle/:number', (req, res) => {
 })
 
 app.get('/letter/:handle/:number', (req, res) => {
-  return res.send("letters")
+  var params = parseForParams(req)
+  getLetters(params.count, params.handle, (paragraph_arr) => {
+    res.send(paragraph_arr);
+  })
 })
 
 app.get('/handles', (req, res) => {
@@ -78,6 +84,29 @@ var getWords = function(number_of_words, handle, callback) {
 
   var cb = breakIntoParas(para_sizes.length, para_sizes, callback)
   fetchFromRedis(handle, cb)
+}
+
+var getLetters = function(number_of_letters, handle, resp_callback) {
+  // var breakLettersToWords = function(content) {
+  //   var temp = number_of_letters, content_arr = content.split(' ')
+  //   var word_arr = [], i = 0
+  //   while(i<content_arr.length) {
+  //     var curr_word = content_arr[i]
+  //     var len = curr_word.length
+  //     if(temp >= len) {
+  //       temp -= len
+  //       word_arr.push(curr_word)
+  //     } else {
+  //       // this word is too long, break it and exit the loop
+  //       word_arr.push(curr_word.substring(0, temp))
+  //       break;
+  //     }
+  //     i++;
+  //     if(i == content_arr.length) i = 0;
+  //   }
+  //
+  //
+  // }
 }
 
 var breakIntoParas = function(paras, nums, resp_callback) {
