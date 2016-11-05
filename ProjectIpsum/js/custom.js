@@ -16,6 +16,14 @@ $(function() {
     var size = $('#count').val();
     var handle = $('#handleSelect').find(":selected").text();
 
+    if(size<0) {
+      $('#myModalLabel').empty()
+      $('#myModalLabel').append('@Funnypsums says: ')
+
+      $('#loremIpsumBody').empty()
+      $('#loremIpsumBody').append("<h4>You are funny than the most funny minds. You don't need this!</h4>")
+      $('#modalLauncher').click()
+    } else {
     if(type === undefined || size === undefined)
       alert('Make the selections')
     else {
@@ -32,5 +40,6 @@ $(function() {
         $('#modalLauncher').click()
       });
     }
+  }
   })
 });
